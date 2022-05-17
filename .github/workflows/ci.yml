@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: ['*']
+    types: [opened, reopened, synchronize, ready_for_review]
+    paths-ignore:
+      - '**/README.md'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: haskell/actions/setup@v2
+        with:
+          ghc-version: 'latest'
+          stack-version: 'latest'
+          enable-stack: true
+      - run: |
+          stack clean && stack build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: haskell/actions/setup@v2
+        with:
+          ghc-version: 'latest'
+          stack-version: 'latest'
+          enable-stack: true
+      - run: |
+          stack --no-terminal --color never test
