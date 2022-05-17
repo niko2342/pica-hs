@@ -18,17 +18,6 @@ dependencies:
 library:
   source-dirs: src
 
-executables:
-  pica-hs-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - pica-hs
-
 tests:
   pica-hs-test:
     main:                Spec.hs
