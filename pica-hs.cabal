@@ -25,24 +25,35 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Data.Pica
+      Data.Pica.Parser
+      Data.Pica.Types
   other-modules:
       Paths_pica_hs
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      attoparsec
+    , base >=4.7 && <5
+    , text
   default-language: Haskell2010
 
 test-suite pica-hs-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Data.Pica.Arbitrary
+      Data.Pica.ParserSpec
       Paths_pica_hs
   hs-source-dirs:
       tests
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      QuickCheck
+    , attoparsec
+    , base >=4.7 && <5
+    , hspec
+    , hspec-attoparsec
     , pica-hs
+    , text
   default-language: Haskell2010
