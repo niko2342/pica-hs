@@ -6,7 +6,7 @@ import Data.Pica.Types (SubfieldCode (..))
 import qualified Data.Text as T
 import Test.Hspec
 import Test.Hspec.Attoparsec
-import Test.QuickCheck
+import Test.Hspec.QuickCheck
 
 codeToChar :: SubfieldCode -> Char
 codeToChar (SubfieldCode x) = x
@@ -22,10 +22,9 @@ spec = do
       T.pack "a" ~> parseSubfieldCode `shouldParse` SubfieldCode 'a'
       T.pack "z" ~> parseSubfieldCode `shouldParse` SubfieldCode 'z'
 
-    it "successfully parses an arbitrary subield code" $ do
-      property $
-        \c -> T.pack [codeToChar c] ~> parseSubfieldCode `shouldParse` c
-
-    it "should fail on invalid subfield codes" $ do
+    it "should fail on invalid subfield codes '!' and '@'" $ do
       parseSubfieldCode `shouldFailOn` T.pack "!"
       parseSubfieldCode `shouldFailOn` T.pack "@"
+
+    prop "successfully parses an arbitrary subield code" $
+      \c -> T.pack [codeToChar c] ~> parseSubfieldCode `shouldParse` c
