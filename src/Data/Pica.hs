@@ -1,3 +1,8 @@
-module Data.Pica (SubfieldCode (..)) where
+module Data.Pica
+  ( -- * Types
+    SubfieldCode (..),
+    SubfieldValue (..),
+  )
+where
 
-import Data.Pica.Types (SubfieldCode)
+import Data.Pica.Types (SubfieldCode (..), SubfieldValue (..))

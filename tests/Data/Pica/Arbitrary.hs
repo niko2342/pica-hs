@@ -1,7 +1,13 @@
 module Data.Pica.Arbitrary () where
 
-import Data.Pica.Types (SubfieldCode (..))
+import Data.Pica.Types (SubfieldCode (..), SubfieldValue (..))
+import qualified Data.Text as T
 import Test.QuickCheck
+
+instance Arbitrary SubfieldValue where
+  arbitrary = do
+    t <- arbitrary `suchThat` (\s -> '\RS' `notElem` s && '\US' `notElem` s)
+    return $ SubfieldValue $ T.pack t
 
 instance Arbitrary SubfieldCode where
   arbitrary = do
