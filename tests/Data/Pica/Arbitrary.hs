@@ -1,8 +1,11 @@
 module Data.Pica.Arbitrary () where
 
-import Data.Pica.Types (SubfieldCode (..), SubfieldValue (..))
+import Data.Pica.Types (Subfield (..), SubfieldCode (..), SubfieldValue (..))
 import qualified Data.Text as T
 import Test.QuickCheck
+
+instance Arbitrary Subfield where
+  arbitrary = Subfield <$> arbitrary <*> arbitrary
 
 instance Arbitrary SubfieldValue where
   arbitrary = do

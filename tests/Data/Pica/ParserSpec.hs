@@ -1,8 +1,8 @@
 module Data.Pica.ParserSpec (spec) where
 
-import Data.Pica (SubfieldCode (..), SubfieldValue (..))
 import Data.Pica.Arbitrary
 import Data.Pica.Parser
+import Data.Pica.Types (Subfield (..), SubfieldCode (..), SubfieldValue (..))
 import qualified Data.Text as T
 import Test.Hspec
 import Test.Hspec.Attoparsec
@@ -13,6 +13,12 @@ codeToChar (SubfieldCode x) = x
 
 valueToText :: SubfieldValue -> T.Text
 valueToText (SubfieldValue x) = x
+
+subfieldToText :: Subfield -> T.Text
+subfieldToText (Subfield code value) = T.pack $ '\US' : scode : svalue
+  where
+    svalue = T.unpack $ valueToText value
+    scode = codeToChar code
 
 spec :: Spec
 spec = do
@@ -44,3 +50,10 @@ spec = do
 
       prop "successfully parse an arbitrary subield value" $
         \s -> valueToText s ~> parseSubfieldValue `shouldParse` s
+
+  describe "parseSubfield" $ do
+    it "successfully parses subfields" $ do
+      T.pack "\USa123" ~> parseSubfield `shouldParse` Subfield (SubfieldCode 'a') (SubfieldValue (T.pack "123"))
+
+    prop "successfully parse an arbitrary subfield" $
+      \s -> subfieldToText s ~> parseSubfield `shouldParse` s

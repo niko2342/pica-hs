@@ -2,19 +2,19 @@ module Data.Pica.Parser
   ( -- * Parser functions
     parseSubfieldCode,
     parseSubfieldValue,
+    parseSubfield,
   )
 where
 
 import Data.Attoparsec.Text
 import Data.Char (isAlphaNum, isAscii)
-import Data.Pica.Types (SubfieldCode (..), SubfieldValue (..))
+import Data.Pica.Types (Subfield (..), SubfieldCode (..), SubfieldValue (..))
 
 parseSubfieldCode :: Parser SubfieldCode
-parseSubfieldCode = do
-  code <- satisfy (\c -> isAscii c && isAlphaNum c)
-  return $ SubfieldCode code
+parseSubfieldCode = SubfieldCode <$> satisfy (\c -> isAscii c && isAlphaNum c)
 
 parseSubfieldValue :: Parser SubfieldValue
-parseSubfieldValue = do
-  t <- takeTill (\c -> c == '\US' || c == '\RS')
-  return $ SubfieldValue t
+parseSubfieldValue = SubfieldValue <$> takeTill (\c -> c == '\US' || c == '\RS')
+
+parseSubfield :: Parser Subfield
+parseSubfield = Subfield <$ char '\US' <*> parseSubfieldCode <*> parseSubfieldValue
