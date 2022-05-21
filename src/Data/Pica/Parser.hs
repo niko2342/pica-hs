@@ -3,11 +3,13 @@ module Data.Pica.Parser
     parseSubfieldCode,
     parseSubfieldValue,
     parseSubfield,
-    parseFieldTag,
+    parseTag,
     parseOccurrence,
+    parseField,
   )
 where
 
+import Control.Applicative (optional)
 import Data.Attoparsec.Text
 import Data.Char (isAlphaNum, isAscii, isAsciiUpper, isDigit)
 import Data.Pica.Types
@@ -22,16 +24,24 @@ parseSubfieldValue = SubfieldValue <$> takeTill (\c -> c == '\US' || c == '\RS')
 parseSubfield :: Parser Subfield
 parseSubfield = Subfield <$ char '\US' <*> parseSubfieldCode <*> parseSubfieldValue
 
-parseFieldTag :: Parser FieldTag
-parseFieldTag = do
+parseTag :: Parser Tag
+parseTag = do
   p0 <- satisfy (\c -> c >= '0' && c <= '2')
-  p1 <- satisfy isDigit
-  p2 <- satisfy isDigit
+  p1 <- satisfy isDigit -- TODO: use digit
+  p2 <- satisfy isDigit -- TODO: use digit
   p3 <- satisfy (\c -> isAsciiUpper c || c == '@')
-  return $ FieldTag $ T.pack [p0, p1, p2, p3]
+  return $ Tag $ T.pack [p0, p1, p2, p3]
 
 parseOccurrence :: Parser Occurrence
 parseOccurrence = do
   char '/'
   digits <- choice [count 3 (satisfy isDigit), count 2 (satisfy isDigit)]
   return $ Occurrence $ T.pack digits
+
+parseField :: Parser Field
+parseField =
+  Field
+    <$> parseTag
+    <*> optional parseOccurrence
+    <* char ' '
+    <*> many' parseSubfield

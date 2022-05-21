@@ -3,8 +3,9 @@ module Data.Pica
     SubfieldCode (..),
     SubfieldValue (..),
     Subfield (..),
-    FieldTag (..),
+    Tag (..),
     Occurrence (..),
+    Field (..),
   )
 where
 
