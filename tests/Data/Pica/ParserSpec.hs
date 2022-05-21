@@ -2,7 +2,7 @@ module Data.Pica.ParserSpec (spec) where
 
 import Data.Pica.Arbitrary
 import Data.Pica.Parser
-import Data.Pica.Types (FieldTag (..), Subfield (..), SubfieldCode (..), SubfieldValue (..))
+import Data.Pica.Types
 import qualified Data.Text as T
 import Test.Hspec
 import Test.Hspec.Attoparsec
@@ -22,6 +22,9 @@ subfieldToText (Subfield code value) = T.pack $ '\US' : scode : svalue
 
 tagToText :: FieldTag -> T.Text
 tagToText (FieldTag x) = x
+
+occurrenceToText :: Occurrence -> T.Text
+occurrenceToText (Occurrence o) = T.pack $ '/' : T.unpack o
 
 spec :: Spec
 spec = do
@@ -73,3 +76,17 @@ spec = do
 
     prop "successfully parse an arbitrary field tag" $
       \t -> tagToText t ~> parseFieldTag `shouldParse` t
+
+  describe "parseOccurrence" $ do
+    it "successfully parse occurrence '/01'" $
+      T.pack "/01" ~> parseOccurrence `shouldParse` Occurrence (T.pack "01")
+
+    it "successfully parse occurrence '/001'" $
+      T.pack "/001" ~> parseOccurrence `shouldParse` Occurrence (T.pack "001")
+
+    it "should fail on invalid occurrences" $ do
+      parseOccurrence `shouldFailOn` T.pack "01"
+      parseOccurrence `shouldFailOn` T.pack "/0A"
+
+    prop "successfully parse an arbitrary field tag" $
+      \o -> occurrenceToText o ~> parseOccurrence `shouldParse` o

@@ -4,6 +4,7 @@ module Data.Pica.Parser
     parseSubfieldValue,
     parseSubfield,
     parseFieldTag,
+    parseOccurrence,
   )
 where
 
@@ -28,3 +29,9 @@ parseFieldTag = do
   p2 <- satisfy isDigit
   p3 <- satisfy (\c -> isAsciiUpper c || c == '@')
   return $ FieldTag $ T.pack [p0, p1, p2, p3]
+
+parseOccurrence :: Parser Occurrence
+parseOccurrence = do
+  char '/'
+  digits <- choice [count 3 (satisfy isDigit), count 2 (satisfy isDigit)]
+  return $ Occurrence $ T.pack digits
