@@ -5,6 +5,7 @@ module Data.Pica.Types
     Tag (..),
     Occurrence (..),
     Field (..),
+    Record (..),
   )
 where
 
@@ -30,4 +31,7 @@ data Field = Field
     _occurrence :: Maybe Occurrence,
     _subfields :: [Subfield]
   }
+  deriving (Show, Eq)
+
+newtype Record = Record [Field]
   deriving (Show, Eq)

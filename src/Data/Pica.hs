@@ -6,6 +6,7 @@ module Data.Pica
     Tag (..),
     Occurrence (..),
     Field (..),
+    Record (..),
   )
 where
 

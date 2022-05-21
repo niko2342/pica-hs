@@ -5,6 +5,9 @@ import Data.Pica.Types
 import qualified Data.Text as T
 import Test.QuickCheck
 
+instance Arbitrary Record where
+  arbitrary = Record <$> listOf1 arbitrary
+
 instance Arbitrary Field where
   arbitrary = Field <$> arbitrary <*> arbitrary <*> arbitrary
 

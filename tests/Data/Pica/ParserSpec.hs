@@ -37,6 +37,9 @@ fieldToText (Field (Tag tag) (Just occurrence) subfields) =
 fieldToText (Field (Tag tag) Nothing subfields) =
   tag <> " " <> subfieldsToText subfields <> "\RS"
 
+recordToText :: Record -> T.Text
+recordToText (Record fields) = T.concat $ fmap fieldToText fields
+
 spec :: Spec
 spec = do
   describe "parseSubfieldCode" $ do
@@ -108,3 +111,10 @@ spec = do
 
     prop "successfully parse an arbitrary field" $
       \f -> fieldToText f ~> parseField `shouldParse` f
+
+  describe "parseRecord" $ do
+    it "successfully parses records" $ do
+      T.pack "003@ \US0123456789\RS" ~> parseRecord `shouldParse` Record [Field {_tag = Tag "003@", _occurrence = Nothing, _subfields = [Subfield {_code = SubfieldCode '0', _value = SubfieldValue "123456789"}]}]
+
+    prop "successfully parse an arbitrary record" $
+      \r -> recordToText r ~> parseRecord `shouldParse` r

@@ -6,6 +6,7 @@ module Data.Pica.Parser
     parseTag,
     parseOccurrence,
     parseField,
+    parseRecord,
   )
 where
 
@@ -45,3 +46,7 @@ parseField =
     <*> optional parseOccurrence
     <* char ' '
     <*> many' parseSubfield
+    <* char '\RS'
+
+parseRecord :: Parser Record
+parseRecord = Record <$> many1 parseField <* atEnd
