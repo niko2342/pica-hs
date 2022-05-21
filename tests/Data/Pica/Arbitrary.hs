@@ -5,19 +5,22 @@ import Data.Pica.Types
 import qualified Data.Text as T
 import Test.QuickCheck
 
+instance Arbitrary Field where
+  arbitrary = Field <$> arbitrary <*> arbitrary <*> arbitrary
+
 instance Arbitrary Occurrence where
   arbitrary = do
     p0 <- arbitrary `suchThat` isDigit
     p1 <- arbitrary `suchThat` isDigit
     return $ Occurrence $ T.pack [p0, p1]
 
-instance Arbitrary FieldTag where
+instance Arbitrary Tag where
   arbitrary = do
     c0 <- choose ('0', '2')
     c1 <- choose ('0', '9')
     c2 <- choose ('0', '9')
     c3 <- elements ('@' : ['A' .. 'Z'])
-    return $ FieldTag (T.pack [c0, c1, c2, c3])
+    return $ Tag (T.pack [c0, c1, c2, c3])
 
 instance Arbitrary Subfield where
   arbitrary = Subfield <$> arbitrary <*> arbitrary

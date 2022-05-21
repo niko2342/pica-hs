@@ -2,8 +2,9 @@ module Data.Pica.Types
   ( SubfieldCode (..),
     SubfieldValue (..),
     Subfield (..),
-    FieldTag (..),
+    Tag (..),
     Occurrence (..),
+    Field (..),
   )
 where
 
@@ -18,8 +19,15 @@ newtype SubfieldValue = SubfieldValue Text
 data Subfield = Subfield {_code :: SubfieldCode, _value :: SubfieldValue}
   deriving (Show, Eq)
 
-newtype FieldTag = FieldTag Text
+newtype Tag = Tag Text
   deriving (Show, Eq)
 
 newtype Occurrence = Occurrence Text
+  deriving (Show, Eq)
+
+data Field = Field
+  { _tag :: Tag,
+    _occurrence :: Maybe Occurrence,
+    _subfields :: [Subfield]
+  }
   deriving (Show, Eq)
