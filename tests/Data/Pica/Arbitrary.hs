@@ -1,8 +1,16 @@
 module Data.Pica.Arbitrary () where
 
-import Data.Pica.Types (Subfield (..), SubfieldCode (..), SubfieldValue (..))
+import Data.Pica.Types (FieldTag (..), Subfield (..), SubfieldCode (..), SubfieldValue (..))
 import qualified Data.Text as T
 import Test.QuickCheck
+
+instance Arbitrary FieldTag where
+  arbitrary = do
+    c0 <- choose ('0', '2')
+    c1 <- choose ('0', '9')
+    c2 <- choose ('0', '9')
+    c3 <- elements ('@' : ['A' .. 'Z'])
+    return $ FieldTag (T.pack [c0, c1, c2, c3])
 
 instance Arbitrary Subfield where
   arbitrary = Subfield <$> arbitrary <*> arbitrary

@@ -2,7 +2,7 @@ module Data.Pica.ParserSpec (spec) where
 
 import Data.Pica.Arbitrary
 import Data.Pica.Parser
-import Data.Pica.Types (Subfield (..), SubfieldCode (..), SubfieldValue (..))
+import Data.Pica.Types (FieldTag (..), Subfield (..), SubfieldCode (..), SubfieldValue (..))
 import qualified Data.Text as T
 import Test.Hspec
 import Test.Hspec.Attoparsec
@@ -19,6 +19,9 @@ subfieldToText (Subfield code value) = T.pack $ '\US' : scode : svalue
   where
     svalue = T.unpack $ valueToText value
     scode = codeToChar code
+
+tagToText :: FieldTag -> T.Text
+tagToText (FieldTag x) = x
 
 spec :: Spec
 spec = do
@@ -57,3 +60,16 @@ spec = do
 
     prop "successfully parse an arbitrary subfield" $
       \s -> subfieldToText s ~> parseSubfield `shouldParse` s
+
+  describe "parseFieldTag" $ do
+    it "successfully parses field tag '003@'" $
+      T.pack "003@" ~> parseFieldTag `shouldParse` FieldTag (T.pack "003@")
+
+    it "should fail on invalid field tags" $ do
+      parseFieldTag `shouldFailOn` T.pack "345@"
+      parseFieldTag `shouldFailOn` T.pack "0A2A"
+      parseFieldTag `shouldFailOn` T.pack "00AA"
+      parseFieldTag `shouldFailOn` T.pack "001!"
+
+    prop "successfully parse an arbitrary field tag" $
+      \t -> tagToText t ~> parseFieldTag `shouldParse` t
