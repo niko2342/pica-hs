@@ -4,7 +4,8 @@ module Data.Pica
     SubfieldValue (..),
     Subfield (..),
     FieldTag (..),
+    Occurrence (..),
   )
 where
 
-import Data.Pica.Types (FieldTag (..), Subfield (..), SubfieldCode (..), SubfieldValue (..))
+import Data.Pica.Types

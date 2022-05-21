@@ -1,8 +1,15 @@
 module Data.Pica.Arbitrary () where
 
-import Data.Pica.Types (FieldTag (..), Subfield (..), SubfieldCode (..), SubfieldValue (..))
+import Data.Char (isDigit)
+import Data.Pica.Types
 import qualified Data.Text as T
 import Test.QuickCheck
+
+instance Arbitrary Occurrence where
+  arbitrary = do
+    p0 <- arbitrary `suchThat` isDigit
+    p1 <- arbitrary `suchThat` isDigit
+    return $ Occurrence $ T.pack [p0, p1]
 
 instance Arbitrary FieldTag where
   arbitrary = do
