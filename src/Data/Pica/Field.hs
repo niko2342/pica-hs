@@ -6,10 +6,12 @@ module Data.Pica.Field
     -- * Functions
     parseField,
     level,
+    range,
   )
 where
 
 import Control.Applicative (optional)
+import Control.Exception (assert)
 import Data.Attoparsec.Text
 import Data.Char (isAsciiUpper)
 import Data.Pica.Subfield
@@ -60,9 +62,20 @@ parseField =
 data Level = Main | Local | Copy
   deriving (Eq, Show)
 
+-- | Returns the level of a field.
+--
+-- @since 0.1.0
 level :: Field -> Level
 level (Field tag _ _) = case T.uncons tag of
   Just ('0', _) -> Main
   Just ('1', _) -> Local
   Just ('2', _) -> Copy
+  _ -> error "invalid tag"
+
+-- | Returns the range of a field.
+--
+-- @since 0.1.0
+range :: Field -> T.Text
+range (Field tag _ _) = case T.length tag of
+  4 -> T.take 2 $ T.drop 1 tag
   _ -> error "invalid tag"
