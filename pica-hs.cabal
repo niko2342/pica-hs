@@ -12,7 +12,7 @@ bug-reports:    https://github.com/niko2342/pica-hs/issues
 author:         Nico Wagner
 maintainer:     nwagner84@protonmail.com
 copyright:      2022 Nico Wagner
-license:        BSD3
+license:        UNLICENSE
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:

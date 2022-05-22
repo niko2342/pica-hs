@@ -1,16 +1,16 @@
-name:                pica-hs
-version:             0.1.0.0
-github:              "niko2342/pica-hs"
-license:             BSD3
-author:              "Nico Wagner"
-maintainer:          "nwagner84@protonmail.com"
-copyright:           "2022 Nico Wagner"
+name: pica-hs
+version: 0.1.0.0
+github: "niko2342/pica-hs"
+license: UNLICENSE
+author: "Nico Wagner"
+maintainer: "nwagner84@protonmail.com"
+copyright: "2022 Nico Wagner"
 
 extra-source-files:
 - CHANGELOG.md
 - README.md
 
-description:         Please see the README on GitHub at <https://github.com/niko2342/pica-hs#readme>
+description: Please see the README on GitHub at <https://github.com/niko2342/pica-hs#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -22,8 +22,8 @@ library:
 
 tests:
   pica-hs-test:
-    main:                Spec.hs
-    source-dirs:         tests
+    main: Spec.hs
+    source-dirs: tests
     ghc-options:
     - -threaded
     - -rtsopts
