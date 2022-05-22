@@ -1,9 +1,11 @@
 module Data.Pica.Field
   ( -- * Types
     Field (..),
+    Level (..),
 
     -- * Functions
     parseField,
+    level,
   )
 where
 
@@ -51,3 +53,16 @@ parseField =
     <* char ' '
     <*> many' parseSubfield
     <* char '\RS'
+
+-- | The Level of a field.
+--
+-- @since 0.1.0
+data Level = Main | Local | Copy
+  deriving (Eq, Show)
+
+level :: Field -> Level
+level (Field tag _ _) = case T.uncons tag of
+  Just ('0', _) -> Main
+  Just ('1', _) -> Local
+  Just ('2', _) -> Copy
+  _ -> error "invalid tag"
