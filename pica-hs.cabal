@@ -44,6 +44,7 @@ test-suite pica-hs-test
   main-is: Spec.hs
   other-modules:
       Data.Pica.Arbitrary
+      Data.Pica.FieldSpec
       Data.Pica.ParserSpec
       Paths_pica_hs
   hs-source-dirs:
