@@ -28,8 +28,8 @@ parseSubfield = Subfield <$ char '\US' <*> parseSubfieldCode <*> parseSubfieldVa
 parseTag :: Parser Tag
 parseTag = do
   p0 <- satisfy (\c -> c >= '0' && c <= '2')
-  p1 <- satisfy isDigit -- TODO: use digit
-  p2 <- satisfy isDigit -- TODO: use digit
+  p1 <- digit
+  p2 <- digit
   p3 <- satisfy (\c -> isAsciiUpper c || c == '@')
   return $ Tag $ T.pack [p0, p1, p2, p3]
 
