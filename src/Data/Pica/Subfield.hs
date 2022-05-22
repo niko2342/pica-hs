@@ -1,12 +1,19 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Pica.Subfield
   ( -- * Types
     Subfield (..),
 
     -- * Functions
     parseSubfield,
+
+    -- * Lenses
+    code,
+    value,
   )
 where
 
+import Control.Lens
 import Data.Attoparsec.Text
 import Data.Char (isAlphaNum, isAscii)
 import qualified Data.Text as T
@@ -16,6 +23,8 @@ import qualified Data.Text as T
 -- @since 0.10
 data Subfield = Subfield {_code :: Char, _value :: T.Text}
   deriving (Show, Eq)
+
+makeLenses ''Subfield
 
 -- | Parse a subfield
 --
