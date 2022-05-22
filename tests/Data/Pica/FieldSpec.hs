@@ -3,12 +3,25 @@
 module Data.Pica.FieldSpec (spec) where
 
 import Control.Exception (evaluate)
+import Control.Lens
 import Data.Pica.Field
+import Data.Pica.Subfield
 import qualified Data.Text as T
 import Test.Hspec
 
 spec :: Spec
 spec = do
+  describe "lenses" $ do
+    it "returns the tag of a field" $ do
+      (Field "003@" Nothing []) ^. tag `shouldBe` "003@"
+
+    it "returns the occurrence of a field" $ do
+      (Field "003@" (Just "01") []) ^. occurrence `shouldBe` Just "01"
+
+    it "returns the Subfields of a field" $ do
+      (Field "003@" Nothing [Subfield '0' "abc"]) ^. subfields
+        `shouldBe` [Subfield '0' "abc"]
+
   describe "level" $ do
     it "returns the level of a field" $ do
       level (Field "003@" Nothing []) `shouldBe` Main

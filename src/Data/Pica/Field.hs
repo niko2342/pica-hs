@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Data.Pica.Field
   ( -- * Types
     Field (..),
@@ -7,11 +9,17 @@ module Data.Pica.Field
     parseField,
     level,
     range,
+
+    -- * Lenses
+    tag,
+    occurrence,
+    subfields,
   )
 where
 
 import Control.Applicative (optional)
 import Control.Exception (assert)
+import qualified Control.Lens as L
 import Data.Attoparsec.Text
 import Data.Char (isAsciiUpper)
 import Data.Pica.Subfield
@@ -26,6 +34,8 @@ data Field = Field
     _subfields :: [Subfield]
   }
   deriving (Show, Eq)
+
+L.makeLenses ''Field
 
 -- | Parse Tag
 --
