@@ -1,13 +1,11 @@
 module Data.Pica
   ( -- * Types
-    SubfieldCode (..),
-    SubfieldValue (..),
     Subfield (..),
-    Tag (..),
-    Occurrence (..),
     Field (..),
     Record (..),
   )
 where
 
-import Data.Pica.Types
+import Data.Pica.Field
+import Data.Pica.Record
+import Data.Pica.Subfield

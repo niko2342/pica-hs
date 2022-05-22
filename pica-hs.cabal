@@ -26,8 +26,9 @@ source-repository head
 library
   exposed-modules:
       Data.Pica
-      Data.Pica.Parser
-      Data.Pica.Types
+      Data.Pica.Field
+      Data.Pica.Record
+      Data.Pica.Subfield
   other-modules:
       Paths_pica_hs
   hs-source-dirs:

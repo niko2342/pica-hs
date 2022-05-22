@@ -1,7 +1,7 @@
 module Data.Pica.Arbitrary () where
 
 import Data.Char (isDigit)
-import Data.Pica.Types
+import Data.Pica
 import qualified Data.Text as T
 import Test.QuickCheck
 
@@ -9,35 +9,41 @@ instance Arbitrary Record where
   arbitrary = Record <$> listOf1 arbitrary
 
 instance Arbitrary Field where
-  arbitrary = Field <$> arbitrary <*> arbitrary <*> arbitrary
+  arbitrary = Field <$> arbitraryTag <*> arbitraryOccurrence <*> arbitrary
 
-instance Arbitrary Occurrence where
-  arbitrary = do
-    p0 <- arbitrary `suchThat` isDigit
-    p1 <- arbitrary `suchThat` isDigit
-    return $ Occurrence $ T.pack [p0, p1]
+arbitraryOccurrence :: Gen (Maybe T.Text)
+arbitraryOccurrence =
+  frequency
+    [ (7, return Nothing),
+      ( 2,
+        do
+          p0 <- arbitrary `suchThat` isDigit
+          p1 <- arbitrary `suchThat` isDigit
+          return $ Just (T.pack [p0, p1])
+      ),
+      ( 1,
+        do
+          p0 <- arbitrary `suchThat` isDigit
+          p1 <- arbitrary `suchThat` isDigit
+          p2 <- arbitrary `suchThat` isDigit
+          return $ Just (T.pack [p0, p1, p2])
+      )
+    ]
 
-instance Arbitrary Tag where
-  arbitrary = do
-    c0 <- choose ('0', '2')
-    c1 <- choose ('0', '9')
-    c2 <- choose ('0', '9')
-    c3 <- elements ('@' : ['A' .. 'Z'])
-    return $ Tag (T.pack [c0, c1, c2, c3])
+arbitraryTag :: Gen T.Text
+arbitraryTag = do
+  c0 <- choose ('0', '2')
+  c1 <- choose ('0', '9')
+  c2 <- choose ('0', '9')
+  c3 <- elements ('@' : ['A' .. 'Z'])
+  return $ T.pack [c0, c1, c2, c3]
 
 instance Arbitrary Subfield where
-  arbitrary = Subfield <$> arbitrary <*> arbitrary
-
-instance Arbitrary SubfieldValue where
   arbitrary = do
-    t <- arbitrary `suchThat` (\s -> '\RS' `notElem` s && '\US' `notElem` s)
-    return $ SubfieldValue $ T.pack t
-
-instance Arbitrary SubfieldCode where
-  arbitrary = do
-    c <-
-      -- The following frequency distribution is based on an evaluation
-      -- of 36,004,180 PICA+ record of the German National Library (DNB).
+    value <- arbitrary `suchThat` (\s -> '\RS' `notElem` s && '\US' `notElem` s)
+    -- The following frequency distribution is based on an evaluation
+    -- of 36,004,180 PICA+ record of the German National Library (DNB).
+    code <-
       frequency
         [ (906253807, return 'a'),
           (667064726, return '0'),
@@ -102,4 +108,4 @@ instance Arbitrary SubfieldCode where
           (1, return '8'),
           (1, return 'W')
         ]
-    return $ SubfieldCode c
+    return $ Subfield code (T.pack value)
